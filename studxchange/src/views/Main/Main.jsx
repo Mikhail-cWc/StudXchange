@@ -10,6 +10,7 @@ import bellIcon from './../../img/bellIcon.svg';
 import filterIcon from './../../img/filterIcon.svg';
 import { useEffect } from 'react';
 import { Task } from '../../components/';
+import Navigation from '../../components/Navigation';
 
 const Main = ({ id, activePanel, go, ROUTES }) => {
   const [buttonActive, setButtonActive] = useState('1');
@@ -65,19 +66,22 @@ const Main = ({ id, activePanel, go, ROUTES }) => {
             </div>
           </div>
           <div className="main-container">
-            {tasksData.map((obj) => (
-              <Task
-                go={go}
-                ROUTES={ROUTES}
-                key={obj.id}
-                title={obj.title}
-                descr={obj.description}
-                dateOrder={obj.orderDate}
-                price={obj.price}
-                id={obj.id}
-              />
-            ))}
+            <div className="content">
+              {tasksData.map((obj) => (
+                <Task
+                  go={go}
+                  ROUTES={ROUTES}
+                  key={obj.id}
+                  title={obj.title}
+                  descr={obj.description}
+                  dateOrder={obj.orderDate}
+                  price={obj.price}
+                  id={obj.id}
+                />
+              ))}
+            </div>
           </div>
+          <Navigation />
         </div>
       </div>
     </Panel>
