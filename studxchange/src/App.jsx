@@ -33,6 +33,10 @@ import {
   MODAL_TERMS,
   MODAL_FILTER,
   MODAL_DISCIPLINE,
+  MODAL_TOWNS,
+  MODAL_INSTITUTE,
+  PANEL__CREATE,
+  PANEL_CHATROOM,
 } from './router';
 import Messages from './views/Messages/Messages';
 import Profile from './views/Profile/Profile';
@@ -41,7 +45,11 @@ import MyPublication from './views/MyPublication/MyPublication';
 import Respond from './views/Respond/Respond';
 import Terms from './modals/Terms/Terms';
 import Filter from './modals/Filter/Filter';
-import Discipline from './modals/Discipline/Discipline';
+import Discipline from './modals/subFilter/Discipline';
+import Towns from './modals/subFilter/Towns';
+import Institute from './modals/subFilter/Institute';
+import CreateTask from './views/CreateTask/CreateTask';
+import ChatRoom from './views/ChatRoom/ChatRoom';
 
 const STORAGE_KEYS = {
   STATUS: 'status',
@@ -83,7 +91,7 @@ const App = () => {
           data[key] = value ? JSON.parse(value) : {};
           switch (key) {
             case STORAGE_KEYS.STATUS:
-              if (!data[key].userApplyPolicy) {
+              if (data[key].userApplyPolicy) {
                 router.pushPage(PAGE_HOME);
                 setUserApplyPolicy(true);
               }
@@ -105,7 +113,8 @@ const App = () => {
       setPopout(null);
     }
     fetchData();
-  }, []);
+    console.log('dsd');
+  }, [userApplyPolicy]);
 
   const go = (page) => {
     router.pushPage(PAGE_HOME);
@@ -136,6 +145,8 @@ const App = () => {
       />
       <Filter id={MODAL_FILTER} discipline={discipline} setDiscipline={setDiscipline} />
       <Discipline id={MODAL_DISCIPLINE} discipline={discipline} setDiscipline={setDiscipline} />
+      <Towns id={MODAL_TOWNS} />
+      <Institute id={MODAL_INSTITUTE} />
     </ModalRoot>
   );
 
@@ -159,6 +170,8 @@ const App = () => {
                   <Profile id={PANEL_PROFILE} />
                   <MyPublication id={PANEL_PUBLICATIONS} />
                   <Respond id={PANEL_RESPOND} />
+                  <CreateTask id={PANEL__CREATE} />
+                  <ChatRoom id={PANEL_CHATROOM} />
                 </View>
               </div>
             </SplitCol>
