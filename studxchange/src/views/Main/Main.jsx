@@ -10,9 +10,14 @@ import bellIcon from './../../img/bellIcon.svg';
 import filterIcon from './../../img/filterIcon.svg';
 import { useEffect } from 'react';
 import { Task } from '../../components/';
+import Navigation from '../../components/Navigation';
+import { useRouter } from '@happysanta/router';
+import { MODAL_FILTER, PAGE_CREATE, PANEL__CREATE } from '../../router';
+import AddButton from '../../components/AddButton/AddButton';
 
 const Main = ({ id, activePanel, go, ROUTES }) => {
   const [buttonActive, setButtonActive] = useState('1');
+  const router = useRouter();
 
   const onClickButton = (e) => {
     setButtonActive(e.target.id);
@@ -61,23 +66,29 @@ const Main = ({ id, activePanel, go, ROUTES }) => {
             </div>
             <div className="filter">
               <img className="filter__icon" src={filterIcon} alt="filter" />
-              <h2 className="filter__title">Фильтры</h2>
+              <h2 onClick={() => router.pushModal(MODAL_FILTER)} className="filter__title">
+                Фильтры
+              </h2>
             </div>
           </div>
-          <div className="main-container">
-            {tasksData.map((obj) => (
-              <Task
-                go={go}
-                ROUTES={ROUTES}
-                key={obj.id}
-                title={obj.title}
-                descr={obj.description}
-                dateOrder={obj.orderDate}
-                price={obj.price}
-                id={obj.id}
-              />
-            ))}
+          <div className="content-container">
+            <AddButton router={router} createPanel={PAGE_CREATE} />
+            <div className="content">
+              {tasksData.map((obj) => (
+                <Task
+                  go={go}
+                  ROUTES={ROUTES}
+                  key={obj.id}
+                  title={obj.title}
+                  descr={obj.description}
+                  dateOrder={obj.orderDate}
+                  price={obj.price}
+                  id={obj.id}
+                />
+              ))}
+            </div>
           </div>
+          <Navigation />
         </div>
       </div>
     </Panel>
