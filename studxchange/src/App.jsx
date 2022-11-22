@@ -66,12 +66,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    bridge.subscribe(({ detail: { type, data } }) => {
-      if (type === 'VKWebAppUpdateConfig') {
-        setScheme('light');
-      }
-    });
-
     async function fetchData() {
       const user = await bridge.send('VKWebAppGetUserInfo');
       const storageData = await bridge.send('VKWebAppStorageGet', {
@@ -105,7 +99,6 @@ const App = () => {
       setPopout(null);
     }
     fetchData();
-    console.log('dsd');
   }, [userApplyPolicy]);
 
   const go = (page) => {
@@ -143,32 +136,30 @@ const App = () => {
   );
 
   return (
-    <ConfigProvider scheme={scheme}>
-      <AdaptivityProvider>
-        <AppRoot>
-          <SplitLayout modal={modal}>
-            <SplitCol>
-              <div className="container">
-                <View id={VIEW_MAIN} activePanel={location.getViewActivePanel(VIEW_MAIN)}>
-                  <Intro
-                    id={PANEL_MAIN}
-                    go={veiwIntro}
-                    userApplyPolicy={userApplyPolicy}
-                    setOpen={setOpen}
-                  />
-                  <Main id={PANEL_HOME} />
-                  <Messages id={PANEL_MESSAGES} />
-                  <Profile id={PANEL_PROFILE} />
-                  <MyPublication id={PANEL_PUBLICATIONS} />
-                  <Respond id={PANEL_RESPOND} />
-                  <CreateTask id={PANEL__CREATE} />
-                  <ChatRoom id={PANEL_CHATROOM} />
-                </View>
-              </div>
-            </SplitCol>
-          </SplitLayout>
-        </AppRoot>
-      </AdaptivityProvider>
+    <ConfigProvider scheme={'light'}>
+      <AppRoot>
+        <SplitLayout modal={modal}>
+          <SplitCol>
+            <div className="container">
+              <View id={VIEW_MAIN} activePanel={location.getViewActivePanel(VIEW_MAIN)}>
+                <Intro
+                  id={PANEL_MAIN}
+                  go={veiwIntro}
+                  userApplyPolicy={userApplyPolicy}
+                  setOpen={setOpen}
+                />
+                <Main id={PANEL_HOME} />
+                <Messages id={PANEL_MESSAGES} />
+                <Profile id={PANEL_PROFILE} />
+                <MyPublication id={PANEL_PUBLICATIONS} />
+                <Respond id={PANEL_RESPOND} />
+                <CreateTask id={PANEL__CREATE} />
+                <ChatRoom id={PANEL_CHATROOM} />
+              </View>
+            </div>
+          </SplitCol>
+        </SplitLayout>
+      </AppRoot>
     </ConfigProvider>
   );
 };

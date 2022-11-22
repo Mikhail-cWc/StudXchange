@@ -1,26 +1,24 @@
-import {
-  ModalPage,
-  usePlatform,
-  ModalPageHeader,
-  PanelHeaderButton,
-  DateInput,
-} from '@vkontakte/vkui';
+import { ModalPage, ModalPageHeader, DateInput } from '@vkontakte/vkui';
 import React, { useState } from 'react';
 
 import './Filter.css';
 import FilterItem from '../../components/FilterItem/FilterItem';
 import InputItem from '../../components/InputItem/InputItem';
 import { PAGE_HOME, router, MODAL_DISCIPLINE, MODAL_TOWNS, MODAL_INSTITUTE } from '../../router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPrice } from '../../redux/slices/filterSlice';
 
 const Filter = ({ id, discipline, setDiscipline }) => {
   const filterState = useSelector((state) => state.filter);
-  const [value, setValue] = useState(new Date());
+  const dispatch = useDispatch();
+  const [dateFrom, setDateFrom] = useState();
+  const [dateTo, setDateTo] = useState();
   console.log(filterState);
 
   return (
     <ModalPage id={id} settlingHeight={100}>
       <div className="filter-modal">
+        <span className="swipe-line"></span>
         <ModalPageHeader>
           <div className="filter-modal__header">
             <h1 className="filter-modal__title">Фильтры</h1>
@@ -51,11 +49,16 @@ const Filter = ({ id, discipline, setDiscipline }) => {
         />
         <h2 className="filter-modal__title">Сроки</h2>
         <div className="filter-modal__datepicker">
-          <DateInput value={value} onChange={setValue} />
-          <DateInput value={value} onChange={setValue} />
+          <DateInput value={dateFrom} onChange={setDateFrom} />
+          <DateInput value={dateTo} onChange={setDateTo} />
         </div>
         <h2 className="filter-modal__title">Желаемый бюджет</h2>
-        <InputItem title={'Цена, ₽ '} />
+        <InputItem
+          price={filterState.price}
+          dispatch={dispatch}
+          setPrice={setPrice}
+          title={'Цена, ₽ '}
+        />
         <div className="filter-modal__acceptbtn">
           <button onClick={() => router.pushPage(PAGE_HOME)} className="button filter-btn">
             Применить

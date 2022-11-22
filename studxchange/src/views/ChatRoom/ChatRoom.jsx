@@ -12,12 +12,12 @@ const ChatRoom = ({ id }) => {
   const router = useRouter();
   return (
     <Panel id={id}>
+      <div className="chatRoom__header">
+        <div onClick={() => router.popPage()} className="arrow-left"></div>
+        <Person colorText={'white'} name={'Наташа Ростова'} descr={''} status={'Online'} />
+        <img className="chatRoom__dots" src={dots} alt="" />
+      </div>
       <div className="chatRoom">
-        <div className="chatRoom__header">
-          <div onClick={() => router.popPage()} className="arrow-left"></div>
-          <Person name={'Наташа Ростова'} descr={''} status={'Online'} />
-          <img className="chatRoom__dots" src={dots} alt="" />
-        </div>
         <div className="chatRoom-messages">
           <div className="first-msg">
             <p className="msg-date">28 мая</p>
@@ -76,14 +76,14 @@ const ChatRoom = ({ id }) => {
             </div>
           </div>
         </div>
-        <FixedLayout filled vertical="bottom">
-          <div className="enterMsg">
-            <span className="enterMsg__icon enterMsg__icon--left"></span>
-            <input className="enterMsg__input" placeholder="Введите текст сообщения" type="text" />
-            <span className="enterMsg__icon enterMsg__icon--right"></span>
-          </div>
-        </FixedLayout>
       </div>
+      <FixedLayout filled vertical="bottom">
+        <div className="enterMsg">
+          <span className="enterMsg__icon enterMsg__icon--left"></span>
+          <input className="enterMsg__input" placeholder="Введите текст сообщения" type="text" />
+          <span className="enterMsg__icon enterMsg__icon--right"></span>
+        </div>
+      </FixedLayout>
       <Navigation />
     </Panel>
   );
