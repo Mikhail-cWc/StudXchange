@@ -4,6 +4,9 @@ export { default as AddButton }
 export { default as FilterItem }
     from "./FilterItem/FilterItem.jsx";
 
+export { default as Header }
+    from "./Header/Header.jsx";
+
 export { default as InputItem }
     from "./InputItem/InputItem.jsx";
 
@@ -15,6 +18,9 @@ export { default as Navigation }
 
 export { default as Person }
     from "./Person/Person.jsx";
+
+export { default as SkeletonCard }
+    from './SkeletonCard/SkeletonCard.jsx'
 
 export { default as Task }
     from "./Task/Task.jsx";

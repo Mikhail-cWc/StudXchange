@@ -12,6 +12,7 @@ import {
   Avatar,
   ModalRoot,
   ModalPage,
+  usePlatform,
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -34,14 +35,19 @@ import {
   MODAL_INSTITUTE,
   PANEL__CREATE,
   PANEL_CHATROOM,
+  POPOUT_CONFIRM,
+  PANEL_WELCOME,
+  PANEL_DEV,
 } from './router';
 
-import { Messages, Profile, Main, MyPublication, Respond, Intro } from './views';
+import { Messages, Profile, Main, MyPublication, Respond, Intro, Dev } from './views';
 
 import { Filter, Discipline, Towns, Institute, Terms } from './modals/';
 
 import CreateTask from './views/CreateTask/CreateTask';
 import ChatRoom from './views/ChatRoom/ChatRoom';
+import Confirm from './popouts/Confirm';
+import Welcome from './views/Welcome/Welcome';
 
 const STORAGE_KEYS = {
   STATUS: 'status',
@@ -54,7 +60,6 @@ const App = () => {
   const [discipline, setDiscipline] = useState('');
 
   const [checked, setChecked] = useState(false);
-  const [scheme, setScheme] = useState('bright_light');
   const [fetchedUser, setUser] = useState(null);
   const [popout, setPopout] = useState(<ScreenSpinner size="large" />);
   const [userApplyPolicy, setUserApplyPolicy] = useState(false);
@@ -86,13 +91,7 @@ const App = () => {
               break;
           }
         } catch (error) {
-          setSnackBar(
-            <Snackbar
-              layout="vertical"
-              onClose={() => setSnackBar(null)}
-              duration={900}
-              before={<Avatar size={24} />}></Snackbar>,
-          );
+          console.log(error);
         }
       });
       setUser(user);
@@ -135,13 +134,26 @@ const App = () => {
     </ModalRoot>
   );
 
+  const popouts = (() => {
+    if (location.getPopupId() === POPOUT_CONFIRM) {
+      return <Confirm />;
+    }
+  })();
+
+  const platfrom = usePlatform();
+
   return (
-    <ConfigProvider scheme={'light'}>
-      <AppRoot>
-        <SplitLayout modal={modal}>
+    <AppRoot>
+      <ConfigProvider
+        platfrom={platfrom}
+        webviewType={'INTERNAL'}
+        appearance={'light'}
+        transitionMotionEnabled={true}>
+        <SplitLayout modal={modal} popout={popouts}>
           <SplitCol>
             <div className="container">
               <View id={VIEW_MAIN} activePanel={location.getViewActivePanel(VIEW_MAIN)}>
+                <Welcome id={PANEL_WELCOME} userApplyPolicy={userApplyPolicy} />
                 <Intro
                   id={PANEL_MAIN}
                   go={veiwIntro}
@@ -155,12 +167,13 @@ const App = () => {
                 <Respond id={PANEL_RESPOND} />
                 <CreateTask id={PANEL__CREATE} />
                 <ChatRoom id={PANEL_CHATROOM} />
+                <Dev id={PANEL_DEV} />
               </View>
             </div>
           </SplitCol>
         </SplitLayout>
-      </AppRoot>
-    </ConfigProvider>
+      </ConfigProvider>
+    </AppRoot>
   );
 };
 

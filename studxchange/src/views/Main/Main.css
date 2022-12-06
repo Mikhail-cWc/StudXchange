@@ -1,27 +1,20 @@
-.main-wrapper {
-    background-color: #F5F5F5;
-    padding-bottom: 15px;
-    width: 100vw;
-    margin: 0 auto;
-}
-
 .wrapper {
     background: #8E95C7;
     border-radius: 0px 0px 10px 10px;
-    height: 210px;
+    height: auto;
+    padding-top: 20px;
+    padding-bottom: 25px;
 }
 
 .search-container {
     width: 312px;
     margin: 0 auto;
-    margin-top: -15px;
-    padding-top: 47px;
 }
 
 .search {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    padding-top: 15px;
 }
 
 .search__input {
@@ -58,7 +51,7 @@
 }
 
 .toggle-btn {
-    padding: 10px 34px;
+    padding: 10px 15px;
     cursor: pointer;
     background: transparent;
     border: 0;
@@ -66,6 +59,12 @@
     position: relative;
     text-align: center;
     width: 50%;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 130%;
+    color: #232036;
 }
 
 #btn {
@@ -88,15 +87,19 @@
 
 .filter {
     display: flex;
-    margin-bottom: 25px;
+    padding-bottom: 10px;
+}
+
+.filter--hidden {
+    display: none;
 }
 
 .filter__title {
     font-style: normal;
     margin-left: 5px;
     font-weight: 400;
-    font-size: 12px;
-    line-height: 130%;
+    font-size: 14px;
+    line-height: 2;
     /* identical to box height, or 16px */
     text-align: center;
     /* white */
@@ -107,12 +110,40 @@
     position: relative;
     display: flex;
     background-color: #F5F5F5;
-    margin-top: 43px;
 }
 
 .content {
     margin: 0 auto;
-    margin-top: -50px;
-    padding-bottom: 30px;
+    margin-top: -65px;
     padding-bottom: 85px;
+}
+
+.create-card {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 320px;
+    height: 100px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.create-card--flex {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.create-card__title {
+    margin: 0;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 130%;
+    color: #232036;
+}
+
+.create-card--button {
+    width: 100%;
 }

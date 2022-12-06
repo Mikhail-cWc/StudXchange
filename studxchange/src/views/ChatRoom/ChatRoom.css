@@ -1,18 +1,14 @@
 .chatRoom {
-    padding-top: 50px;
+    padding-top: 70px;
     padding-left: 24px;
     padding-right: 24px;
 }
 
 .chatRoom__header {
-    position: fixed;
     width: 100%;
     display: flex;
+    gap: 10px;
     align-items: center;
-    background: #8E95C7;
-    border-radius: 0px 0px 10px 10px;
-    height: 70px;
-    padding-top: 5px;
 }
 
 .arrow-left {
@@ -32,6 +28,7 @@
 }
 
 .chatRoom-messages {
+    padding-top: 30px;
     padding-bottom: 100px;
 }
 
@@ -146,12 +143,13 @@
 
 .enterMsg {
     position: relative;
-    margin-top: -95px;
     padding-right: 24px;
     padding-left: 24px;
     background: rgb(255, 255, 255);
     padding-bottom: 12px;
+    padding-top: 12px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .enterMsg__input {
@@ -176,12 +174,12 @@
 
 .enterMsg__icon--left {
     content: url("./../../img/clip.svg");
-    top: 8px;
+    top: 20px;
     left: 33px;
 }
 
 .enterMsg__icon--right {
     content: url("./../../img/smile.svg");
-    top: 8px;
-    right: 55px;
+    top: 20px;
+    right: 45px;
 }
