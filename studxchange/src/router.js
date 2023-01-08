@@ -2,6 +2,7 @@ import { Page, Router } from '@happysanta/router'
 
 //view
 export const VIEW_MAIN = 'view_main'
+export const VIEW_WELCOME = 'view_welcome'
 
 //pages
 export const PAGE_MAIN = '/main'
@@ -31,8 +32,7 @@ export const PANEL_CHATROOM = 'panel_chat'
 export const PAGE_WELCOME = '/'
 export const PANEL_WELCOME = 'panel_welcome'
 
-export const PAGE_DEV = '/dev'
-export const PANEL_DEV = 'panel_dev'
+
 
 //modals
 export const MODAL_TERMS = 'modal_terms'
@@ -47,9 +47,14 @@ export const MODAL_INSTITUTE = 'modal_institute'
 
 export const POPOUT_CONFIRM = 'popout_confirm'
 
+
+//dev
+export const PAGE_DEV = '/dev'
+export const PANEL_DEV = 'panel_dev'
+
 //router
 const routes = {
-    [PAGE_WELCOME]: new Page(PANEL_WELCOME, VIEW_MAIN),
+    [PAGE_WELCOME]: new Page(PANEL_WELCOME, VIEW_WELCOME),
     [PAGE_MAIN]: new Page(PANEL_MAIN, VIEW_MAIN),
     [PAGE_HOME]: new Page(PANEL_HOME, VIEW_MAIN),
     [PAGE_MESSAGES]: new Page(PANEL_MESSAGES, VIEW_MAIN),

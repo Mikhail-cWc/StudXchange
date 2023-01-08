@@ -13,6 +13,8 @@ import {
   ModalRoot,
   ModalPage,
   usePlatform,
+  PullToRefresh,
+  Root,
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -38,16 +40,17 @@ import {
   POPOUT_CONFIRM,
   PANEL_WELCOME,
   PANEL_DEV,
+  VIEW_WELCOME,
 } from './router';
 
-import { Messages, Profile, Main, MyPublication, Respond, Intro, Dev } from './views';
+import { Messages, Profile, Main, MyPublication, Respond, Intro, Dev } from './panels';
 
 import { Filter, Discipline, Towns, Institute, Terms } from './modals/';
 
-import CreateTask from './views/CreateTask/CreateTask';
-import ChatRoom from './views/ChatRoom/ChatRoom';
+import CreateTask from './panels/CreateTask/CreateTask';
+import ChatRoom from './panels/ChatRoom/ChatRoom';
 import Confirm from './popouts/Confirm';
-import Welcome from './views/Welcome/Welcome';
+import Welcome from './panels/Welcome/Welcome';
 
 const STORAGE_KEYS = {
   STATUS: 'status',
@@ -71,49 +74,77 @@ const App = () => {
   };
 
   useEffect(() => {
-    async function fetchData() {
-      const user = await bridge.send('VKWebAppGetUserInfo');
-      const storageData = await bridge.send('VKWebAppStorageGet', {
-        keys: Object.values(STORAGE_KEYS),
-      });
-      const data = {};
-      storageData.keys.forEach(({ key, value }) => {
-        try {
-          data[key] = value ? JSON.parse(value) : {};
-          switch (key) {
-            case STORAGE_KEYS.STATUS:
-              if (data[key].userApplyPolicy) {
-                router.pushPage(PAGE_HOME);
-                setUserApplyPolicy(true);
-              }
-              break;
-            default:
-              break;
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      });
-      setUser(user);
-      setPopout(null);
-    }
-    fetchData();
-  }, [userApplyPolicy]);
+    // async function fetchData() {
+    //   const user = await bridge.send('VKWebAppGetUserInfo');
+    //   console.log(user);
+    //   const storageData = await bridge
+    //     .send('VKWebAppStorageGet', {
+    //       keys: ['applyPolicy'],
+    //     })
+    //     .then((data) => {
+    //       if (data.keys) {
+    //         console.log('Данные получены');
+    //         router.pushPage(PAGE_HOME);
+    //       }
+    //     });
+    //   console.log(storageData);
+    //   // const data = {};
+    //   // storageData.keys.forEach(({ key, value }) => {
+    //   //   try {
+    //   //     data[key] = value ? JSON.parse(value) : {};
+    //   //     switch (key) {
+    //   //       case STORAGE_KEYS.STATUS:
+    //   //         if (data[key].hasSeenIntro) {
+    //   //           router.pushPage(PAGE_HOME);
+    //   //           setUserApplyPolicy(true);
+    //   //         }
+    //   //         break;
+    //   //       default:
+    //   //         break;
+    //   //     }
+    //   // } catch (error) {
+    //   //   console.log(error);
+    //   // }
+    //   // });
+    //   setUser(user);
+    //   setPopout(null);
+    // }
+    // fetchData();
+  }, []);
 
-  const go = (page) => {
-    router.pushPage(PAGE_HOME);
-    setOpen(false);
-  };
+  // const go = (page) => {
+  //   router.pushPage(page);
+  //   setOpen(false);
+  // };
 
-  const veiwIntro = async function () {
+  // const viewIntro = async () => {
+  //   try {
+  //     await bridge.send('VKWebAppStorageSet', {
+  //       key: STORAGE_KEYS.STATUS,
+  //       value: JSON.stringify({
+  //         hasSeenIntro: true,
+  //       }),
+  //     });
+  //     router.pushPage(PAGE_HOME);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const viewIntro = async () => {
     try {
-      await bridge.send('VKWebAppStorageSet', {
-        key: STORAGE_KEYS.STATUS,
-        value: JSON.stringify({
-          userApplyPolicy: true,
-        }),
-      });
-      go(PAGE_HOME);
+      await bridge
+        .send('VKWebAppStorageSet', {
+          key: 'policy',
+          value: 'true',
+        })
+        .then((data) => {
+          if (data.result) {
+            console.log('Успешно задано');
+            setUserApplyPolicy(true);
+            router.pushPage(PAGE_HOME);
+          }
+        });
     } catch (error) {
       console.log(error);
     }
@@ -126,9 +157,14 @@ const App = () => {
         id={MODAL_TERMS}
         checked={checked}
         onClose={() => router.popPage()}
+        viewIntro={viewIntro}
       />
       <Filter id={MODAL_FILTER} discipline={discipline} setDiscipline={setDiscipline} />
-      <Discipline id={MODAL_DISCIPLINE} discipline={discipline} setDiscipline={setDiscipline} />
+      <Discipline
+        id={MODAL_DISCIPLINE}
+        discipline={discipline}
+        setDiscipline={setDiscipline}
+      />
       <Towns id={MODAL_TOWNS} />
       <Institute id={MODAL_INSTITUTE} />
     </ModalRoot>
@@ -142,38 +178,68 @@ const App = () => {
 
   const platfrom = usePlatform();
 
+  const [reloading, setReloading] = useState(false);
+
+  // const reload = () => {
+  //   setReloading(true);
+  //   window.location.reload();
+  //   setReloading(false);
+  // };
+
   return (
-    <AppRoot>
-      <ConfigProvider
-        platfrom={platfrom}
-        webviewType={'INTERNAL'}
-        appearance={'light'}
-        transitionMotionEnabled={true}>
-        <SplitLayout modal={modal} popout={popouts}>
-          <SplitCol>
-            <div className="container">
-              <View id={VIEW_MAIN} activePanel={location.getViewActivePanel(VIEW_MAIN)}>
-                <Welcome id={PANEL_WELCOME} userApplyPolicy={userApplyPolicy} />
-                <Intro
-                  id={PANEL_MAIN}
-                  go={veiwIntro}
-                  userApplyPolicy={userApplyPolicy}
-                  setOpen={setOpen}
-                />
-                <Main id={PANEL_HOME} />
-                <Messages id={PANEL_MESSAGES} />
-                <Profile id={PANEL_PROFILE} />
-                <MyPublication id={PANEL_PUBLICATIONS} />
-                <Respond id={PANEL_RESPOND} />
-                <CreateTask id={PANEL__CREATE} />
-                <ChatRoom id={PANEL_CHATROOM} />
-                <Dev id={PANEL_DEV} />
-              </View>
-            </div>
-          </SplitCol>
-        </SplitLayout>
-      </ConfigProvider>
-    </AppRoot>
+    <ConfigProvider
+      platfrom={platfrom}
+      appearance={'light'}
+      transitionMotionEnabled={true}>
+      <AdaptivityProvider>
+        <AppRoot scroll="contain">
+          <SplitLayout modal={modal} popout={popouts}>
+            <SplitCol animate={true}>
+              <div className="container">
+                {console.log(platfrom)}
+                {/* <PullToRefresh onRefresh={reload} isFetching={reloading}> */}
+                <Root activeView={location.getViewId()}>
+                  <View
+                    id={VIEW_WELCOME}
+                    history={
+                      location.hasOverlay() ? [] : location.getViewHistory(VIEW_WELCOME)
+                    }
+                    activePanel={location.getViewActivePanel(VIEW_WELCOME)}>
+                    <Welcome
+                      id={PANEL_WELCOME}
+                      userApplyPolicy={userApplyPolicy}
+                      activePanel={location.getViewActivePanel(VIEW_WELCOME)}
+                    />
+                  </View>
+                  <View
+                    id={VIEW_MAIN}
+                    activePanel={location.getViewActivePanel(VIEW_MAIN)}
+                    history={
+                      location.hasOverlay() ? [] : location.getViewHistory(VIEW_MAIN)
+                    }>
+                    <Intro
+                      id={PANEL_MAIN}
+                      go={viewIntro}
+                      userApplyPolicy={userApplyPolicy}
+                      setOpen={setOpen}
+                    />
+                    <Main id={PANEL_HOME} />
+                    <MyPublication id={PANEL_PUBLICATIONS} />
+                    <Messages id={PANEL_MESSAGES} />
+                    <Profile id={PANEL_PROFILE} />
+                    <Respond id={PANEL_RESPOND} />
+                    <CreateTask id={PANEL__CREATE} />
+                    <ChatRoom id={PANEL_CHATROOM} />
+                    <Dev id={PANEL_DEV} />
+                  </View>
+                  {/* </PullToRefresh> */}
+                </Root>
+              </div>
+            </SplitCol>
+          </SplitLayout>
+        </AppRoot>
+      </AdaptivityProvider>
+    </ConfigProvider>
   );
 };
 

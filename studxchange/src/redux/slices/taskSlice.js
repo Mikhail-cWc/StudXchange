@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
 export const fetchTasks = createAsyncThunk(
     'tasks/fetchTasksStatus',
-    async(currentPage) => {
+    async (currentPage) => {
         const res = await axios.get(
             `https://635c0281fc2595be263e82f3.mockapi.io/tasks?page=${currentPage}&limit=5`
         );
@@ -18,6 +19,7 @@ export const tasksSlice = createSlice({
         firstFetch: true,
         status: "loading", // loading | success | error,
         currentPage: 1,
+        refreshStatus: false,
     },
     reducers: {
         setItems: (state, action) => {
@@ -25,13 +27,15 @@ export const tasksSlice = createSlice({
         },
         setCurrentPage: (state) => {
             state.currentPage = state.currentPage + 1;
+        },
+        setRefreshStatus: (state, action) => {
+            state.refreshStatus = action.payload
         }
     },
     extraReducers: {
         [fetchTasks.pending]: (state, action) => {
             state.items = [...state.items];
             state.status = 'loading';
-            console.log('fetch')
         },
         [fetchTasks.fulfilled]: (state, action) => {
             state.items.push(...action.payload)
@@ -45,6 +49,6 @@ export const tasksSlice = createSlice({
     }
 })
 
-export const { setItems, setCurrentPage } = tasksSlice.actions;
+export const { setItems, setCurrentPage, setRefreshStatus } = tasksSlice.actions;
 
 export default tasksSlice.reducer
