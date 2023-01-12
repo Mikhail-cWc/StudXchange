@@ -33,7 +33,7 @@
 - Связь front-end'a и back-end'a
 - Уведомления
 
-## [ДИЗАЙН](https://www.figma.com/file/oqGTqK1oX4r08eaBLxKyZb/copy-(1)?node-id=225%3A2357&t=MGdUEmPsA3PJ9LEc-1)
-## [АРХИТЕКТУРА](https://github.com/Mikhail-cWc/StudXchange/tree/main/arhitecture)
+## [Дизайн](https://www.figma.com/file/oqGTqK1oX4r08eaBLxKyZb/copy-(1)?node-id=225%3A2357&t=MGdUEmPsA3PJ9LEc-1)
+## [Архитектура](https://github.com/Mikhail-cWc/StudXchange/tree/main/arhitecture)
 ## [Front-end](https://github.com/Mikhail-cWc/StudXchange/tree/main/front)
 ## [Back-end](https://github.com/Mikhail-cWc/StudXchange/tree/main/back)
