@@ -5,6 +5,7 @@
 Переход между панелями осуществляется с помощью router от [happysanta](https://github.com/HappySanta/router).
 Пример перехода на главную через панель навигации:
 ```jsx
+Navigation.jsx
 /*...*/
 // Создаем роутер
 const router = useRouter();
@@ -25,8 +26,129 @@ const handlePage = (page) => {
           <img src={MainIcon} />
 </TabbarItem>
 /*...*/
+// TabbarItem элемент Tabbar, Tabbar - элемент навигации в VK UI
 ```
+Вывод объявлений:
+```tsx
+// task.jsx
+// Создадим CSS-Класс Task
+const Task = ({ title, descr, dateOrder, price, id, go, ROUTES }) => {
+  return (
+    <div className="content-item">
+      <h1 className="content-item__title">{title}</h1>
+      <p className="content-item__descr">{descr}</p>
+      <div className="content-info">
+        <p className="content-info__date">{dateOrder}</p>
+        <p className="content-info__price">от {price} </p>
+        <button
+          onClick={() => router.pushPage(PAGE_RESPOND, { id: id })}
+          className="content-info__button">
+          Откликнуться
+        </button>
+      </div>
+    </div>
+  );
+};
 
+// taskSlice.js
+// Получим данные
+export const fetchTasks = createAsyncThunk(
+    'tasks/fetchTasksStatus',
+    async (currentPage) => {
+        const res = await axios.get(
+            `https://635c0281fc2595be263e82f3.mockapi.io/tasks?page=${currentPage}&limit=5`
+        );
+        return res.data
+    }
+)
+
+/*createAsyncThunk не генерирует никаких функций редуктора, поскольку 
+не знает, какие данные мы извлекаем, как мы хотим отслеживать состояние
+загрузки или как должны обрабатываться возвращаемые данные. Поэтому описываем всё это дело*/
+
+export const tasksSlice = createSlice({
+    name: 'tasks',
+    initialState: {
+        items: [],
+        firstFetch: true,
+        status: "loading", // loading | success | error,
+        currentPage: 1,
+        refreshStatus: false,
+    },
+    reducers: {
+        setItems: (state, action) => {
+            state.items = action.payload
+        },
+        setCurrentPage: (state) => {
+            state.currentPage = state.currentPage + 1;
+        },
+        setRefreshStatus: (state, action) => {
+            state.refreshStatus = action.payload
+        }
+    },
+    extraReducers: {
+        [fetchTasks.pending]: (state, action) => {
+            state.items = [...state.items];
+            state.status = 'loading';
+        },
+        [fetchTasks.fulfilled]: (state, action) => {
+            state.items.push(...action.payload)
+            state.firstFetch = false;
+            state.status = 'success';
+        },
+        [fetchTasks.rejected]: (state, action) => {
+            state.items = [];
+            state.status = 'error'
+        },
+    }
+})
+
+// Main.jsx
+
+// Получаем items
+const tasksData = useSelector((state) => state.tasks.items);
+
+const getTasks = async () => {
+    try {
+      await dispatch(fetchTasks(currentPage)).unwrap();
+/*...*/
+  useEffect(() => {
+    if (currentPage < 5) {
+      getTasks();
+    }
+  }, [currentPage]);
+ 
+// Вышеописанный CSS-класс используется для замены каждого компонента tasksData на Task
+/*...*/
+<div className="content">
+            {firstFetch
+              ? [...new Array(6)].map((index) => <SkeletonCard key={index} />)
+              : tasksData.map((obj) => (
+                  <Task
+                    go={go}
+                    ROUTES={ROUTES}
+                    key={obj.id}
+                    title={obj.title}
+                    descr={obj.description}
+                    dateOrder={obj.orderDate}
+                    price={obj.price}
+                    id={obj.id}
+                  />
+                ))}
+            {status === 'loading' ? (
+              <div>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </div>
+            ) : null}
+          </div>
+/*...*/
+```
 
 # Create VK Mini App [![npm][npm]][npm-url] [![deps][deps]][deps-url]
 
