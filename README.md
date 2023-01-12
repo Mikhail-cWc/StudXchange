@@ -9,7 +9,7 @@
 
 Список используемых технологий:
 
-- JS + React + library VK + CSS
+- JS + React + VK UI/UX + CSS
 - Web-sockets
 - MySQL
 - Python
