@@ -1,5 +1,33 @@
 [<img width="134" src="https://vk.com/images/apps/mini_apps/vk_mini_apps_logo.svg">](https://vk.com/services)
 
+### Основные концепции
+
+Переход между панелями осуществляется с помощью router от [happysanta](https://github.com/HappySanta/router).
+Пример перехода на главную через панель навигации:
+```jsx
+/*...*/
+// Создаем роутер
+const router = useRouter();
+
+// Переход на page
+const handlePage = (page) => {
+    router.pushPage(page);
+    setSelected(page);
+    console.log(selected);
+  };
+/*...*/
+// При клике на объект осуществляется переход на PAGE_HOME
+<TabbarItem
+          onClick={() => handlePage(PAGE_HOME)}
+          selected={selected === '/home'}
+          data-story="main"
+          text="Главная">
+          <img src={MainIcon} />
+</TabbarItem>
+/*...*/
+```
+
+
 # Create VK Mini App [![npm][npm]][npm-url] [![deps][deps]][deps-url]
 
 ## How to use
