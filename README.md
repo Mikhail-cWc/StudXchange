@@ -1,3 +1,4 @@
+# [Презентация](https://drive.google.com/file/d/1qSMkrpIBMOcPYJqTTANi9xDkpOboAZuD/view)
 # StudXchange
 ## Команда
 - Никита - Автор идеи, дизайнер.
