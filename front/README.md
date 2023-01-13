@@ -1,12 +1,12 @@
 [<img width="134" src="https://vk.com/images/apps/mini_apps/vk_mini_apps_logo.svg">](https://vk.com/services)
 
-### Основные концепции
+### Основная реализация
 
-Переход между панелями осуществляется с помощью router от [happysanta](https://github.com/HappySanta/router).
+.Переход между панелями осуществляется с помощью router от [happysanta](https://github.com/HappySanta/router).
 Пример перехода на главную через панель навигации:
 ```jsx
 Navigation.jsx
-/*...*/
+
 // Создаем роутер
 const router = useRouter();
 
@@ -149,6 +149,152 @@ const getTasks = async () => {
           </div>
 /*...*/
 ```
+-Панель Фильтров
+```tsx
+// FilterItem.jsx
+// Создадим компонент фильтра (Кнопка для перехода на модалку с выобором)
+сonst FilterItem = ({ subTitle, setDiscipline, subModal }) => {
+  const router = useRouter();
+  return (
+    <div className="filterItem-container">
+      <div className="filterItem" onClick={() => router.pushModal(subModal)}>
+        <h1 className="filterItem__title">{subTitle === '' ? 'Выбрать' : subTitle}</h1>
+        <img className="filterItem__img" src={arrowDown} />
+      </div>
+    </div>
+  );
+};
+
+// InputItem.jsx
+// Поле для ввода
+const InputItem = ({ title, setPrice, price, dispatch }) => {
+  return (
+    <div className="inputItem-container">
+      <input
+        value={price}
+        onChange={(e) => dispatch(setPrice(e.target.value))}
+        className="inputItem"
+        placeholder={title}
+        type="text"
+      />
+    </div>
+  );
+};
+
+// filterSlice.js
+// Как и taskSlice пишем filterSlice
+export const filterSlice = createSlice({
+    name: 'filter',
+    initialState: {
+        discipline: "",
+        town: "",
+        institute: "",
+        dateFrom: new Date(),
+        dateTo: new Date(),
+        price: "",
+    },
+    reducers: {
+        setDiscipline: (state, action) => {
+            state.discipline = action.payload
+        },
+        setTown: (state, action) => {
+            state.town = action.payload
+        },
+        setInstitute: (state, action) => {
+            state.institute = action.payload
+        },
+        setDateFrom: (state, action) => {
+            state.dateFrom = action.payload
+        },
+        setDateTo: (state, action) => {
+            state.dateTo = action.payload
+        },
+        setPrice: (state, action) => {
+            state.price = action.payload
+        }
+    },
+})
+
+// На примере институтов, Institute.jsx
+// Пока что институты у нас в массиве
+const itemsArray = [
+    'Московский государственный университет им. М. В. Ломоносова  ',
+    'Московский физико-технический институт',
+    'Высшая школа экономики'
+  ];
+
+// Поиск в модалке институтов
+return (
+    <ModalPage id={id} settlingHeight={100}>
+      <div className="subFilter">
+        <span className="swipe-line"></span>
+        <h1 className="subFilter__title">Институт</h1>
+        <div className="subFilter__search">
+          <input
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="subFilter__input"
+            type="text"
+            placeholder="Поиск"
+          />
+        </div>
+ 
+ // Запись(по клику) в filterSlice найденного(или выбранного) Института в FilterSlice
+   {itemsArray
+          .filter((item) => {
+            if (searchValue === '') {
+              return item;
+            } else if (item.toLowerCase().includes(searchValue.toLowerCase())) {
+              return item;
+            }
+          })
+          .map((item) => (
+            <div className="subFilter__item">
+              <SimpleCell
+                Component="label"
+                activeMode="activeItem"
+                multiline={true}
+                onClick={() => handleInstitute(item)}>
+                {item}
+              </SimpleCell>
+            </div>
+          ))}
+      </div>
+    </ModalPage>
+  );
+};
+
+  const handleInstitute = (item) => {
+/*...*/
+      dispatch(setInstitute(item));
+/*...*/
+
+
+// filter.jsx
+/*...*/
+ <h2 className="filter-modal__title">Учебное заведение</h2>
+        <FilterItem
+          subTitle={filterState.institute}
+          setDiscipline={setDiscipline}
+          subModal={MODAL_INSTITUTE}
+        />
+ <h2 className="filter-modal__title">Сроки</h2>
+        <div className="filter-modal__datepicker">
+          <DateInput value={dateFrom} onChange={setDateFrom} />
+          <DateInput value={dateTo} onChange={setDateTo} />
+        </div>
+        <h2 className="filter-modal__title">Желаемый бюджет</h2>
+        <InputItem
+          price={filterState.price}
+          dispatch={dispatch}
+          setPrice={setPrice}
+          title={'Цена, ₽ '}
+        />
+/*...*/
+```
+
+- При загрузке tasks используется анимация react-loading-skeleton.
+- В панели пользователя стоят заглушки и ниоткуда информация о пользователе не берется (для своего профиля скорее всего мы будем использовать bridge VK, для чужого профиля уже нашу БД)
+- Чат еще не реализован, но панель уже готова, чтобы посмотреть как оно выглядит
 
 # Create VK Mini App [![npm][npm]][npm-url] [![deps][deps]][deps-url]
 
