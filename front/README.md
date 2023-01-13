@@ -2,7 +2,7 @@
 
 ### Основная реализация
 
-.Переход между панелями осуществляется с помощью router от [happysanta](https://github.com/HappySanta/router).
+- Переход между панелями осуществляется с помощью router от [happysanta](https://github.com/HappySanta/router).
 Пример перехода на главную через панель навигации:
 ```jsx
 Navigation.jsx
@@ -28,7 +28,7 @@ const handlePage = (page) => {
 /*...*/
 // TabbarItem элемент Tabbar, Tabbar - элемент навигации в VK UI
 ```
-Вывод объявлений:
+- Вывод объявлений:
 ```tsx
 // task.jsx
 // Создадим CSS-Класс Task
@@ -149,7 +149,7 @@ const getTasks = async () => {
           </div>
 /*...*/
 ```
--Панель Фильтров
+- Панель Фильтров
 ```tsx
 // FilterItem.jsx
 // Создадим компонент фильтра (Кнопка для перехода на модалку с выобором)
