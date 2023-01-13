@@ -1,4 +1,5 @@
 # [Презентация](https://drive.google.com/file/d/1qSMkrpIBMOcPYJqTTANi9xDkpOboAZuD/view)
+# [Видео-демонстрация](https://www.veed.io/view/e333682d-911f-4c31-846a-3be65841c057?panel=share)
 # StudXchange
 ## Команда
 - Никита - Автор идеи, дизайнер.
