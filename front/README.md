@@ -31,7 +31,7 @@ const handlePage = (page) => {
 - Вывод объявлений:
 ```tsx
 // task.jsx
-// Создадим CSS-Класс Task
+// Создадим Task
 const Task = ({ title, descr, dateOrder, price, id, go, ROUTES }) => {
   return (
     <div className="content-item">
